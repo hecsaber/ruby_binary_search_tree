@@ -24,49 +24,49 @@ class Tree
     return nil if first > last
 
     mid = (first + last) / 2
-    root = Node.new(arr[mid])
-    root.prev_one = build_tree(arr, first, mid - 1)
-    root.next_one = build_tree(arr, mid + 1, last)
-    @root = root
+    node = Node.new(arr[mid])
+    node.prev_one = build_tree(arr, first, mid - 1)
+    node.next_one = build_tree(arr, mid + 1, last)
+    @root = node
   end
 
-  def insert(value, temp)
-    if temp.nil?
-      temp = value
-    elsif temp.<=>(value).positive?
-      temp.prev_one = insert(value, temp.prev_one)
-    elsif temp.<=>(value).negative?
-      temp.next_one = insert(value, temp.next_one)
+  def insert(value, node)
+    if node.nil?
+      node = value
+    elsif node.<=>(value).positive?
+      node.prev_one = insert(value, node.prev_one)
+    elsif node.<=>(value).negative?
+      node.next_one = insert(value, node.next_one)
     end
-    temp
+    node
   end
 
-  def delete(value, temp)
-    return temp if temp.nil?
+  def delete(value, node)
+    return node if node.nil?
     
-    if temp.<=>(value).negative?
-      temp.next_one = delete(value, temp.next_one)
-    elsif temp.<=>(value).positive?
-      temp.prev_one = delete(value, temp.prev_one)
+    if node.<=>(value).negative?
+      node.next_one = delete(value, node.next_one)
+    elsif node.<=>(value).positive?
+      node.prev_one = delete(value, node.prev_one)
     else
-      if temp.prev_one.nil?
-        return temp.next_one
-      elsif temp.next_one.nil?
-        return temp.prev_one
+      if node.prev_one.nil?
+        return node.next_one
+      elsif node.next_one.nil?
+        return node.prev_one
       end
 
-      min_node = min_value(temp.next_one)
-      temp.value = min_node.value
-      temp.next_one = delete(min_node, temp.next_one)
+      min_node = min_value(node.next_one)
+      node.value = min_node.value
+      node.next_one = delete(min_node, node.next_one)
     end
-    temp
+    node
   end
 
-  def min_value(temp)
-    minv = temp
-    until temp.prev_one.nil?
-      minv = temp.prev_one
-      temp = temp.prev_one
+  def min_value(node)
+    minv = node
+    until node.prev_one.nil?
+      minv = node.prev_one
+      node = node.prev_one
     end
     minv
   end
